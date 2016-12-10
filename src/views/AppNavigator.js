@@ -8,7 +8,7 @@ import {
   Navigator 
 } from 'react-native';
 import { Color } from '../utils/theme';
-import Setup from './setup/Setup';
+import Setup from './game/Setup';
 import Game from './game/Game';
 
 export default class AppNavigator extends Component {

@@ -3,7 +3,7 @@
 import {
   CREATE_DECK,
   REMOVE_TOP
-} from '../actions/card';
+} from '../actions/deck';
 
 const DefaultState = {
   cards: [],
@@ -11,7 +11,7 @@ const DefaultState = {
   lastRemovedCard: null
 }
 
-const cards = (state = DefaultState, action) => {
+const deck = (state = DefaultState, action) => {
   switch (action.type) {
     case CREATE_DECK:
       return {
@@ -30,4 +30,4 @@ const cards = (state = DefaultState, action) => {
   }
 }
 
-export default cards
+export default deck

@@ -1,6 +1,7 @@
 'use strict';
 
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import {
   StyleSheet,
   Text,
@@ -10,8 +11,9 @@ import {
 } from 'react-native';
 import { Color } from '../../utils/theme';
 import Button from '../components/Button';
+import { createDeck } from '../../actions/deck';
 
-export default class Setup extends Component {
+class Setup extends Component {
   static PropTypes = {
     navigator: React.PropTypes.func.isRequired
   }
@@ -22,6 +24,19 @@ export default class Setup extends Component {
       max: 9,
       numOfCards: 10
     }
+    this.startGame = this.startGame.bind(this);
+  }
+
+  startGame() {
+    const { max, numOfCards } = this.state;
+    const { navigator, createDeck } = this.props;
+
+    createDeck(max, numOfCards)
+    .then(() => navigator.push({ 
+      id: 'game', 
+      max: max, 
+      numOfCards: numOfCards
+    }));
   }
   
   render() {
@@ -57,11 +72,8 @@ export default class Setup extends Component {
         </View>
         <Button 
           text='Start' 
-          onPress={() => navigator.push({ 
-            id: 'game', 
-            max: max, 
-            numOfCards: numOfCards
-          })} />
+          onPress={this.startGame} 
+        />
       </View>
     );
   }
@@ -70,7 +82,8 @@ export default class Setup extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center'
+    justifyContent: 'center',
+    backgroundColor: Color.White
   },
   section: {
     marginVertical: 8
@@ -83,3 +96,15 @@ const styles = StyleSheet.create({
     marginVertical: 6
   }
 });
+
+function mapStateToProps(state, ownProps) {
+  return {};
+}
+
+const mapDispatchToProps = (dispatch, ownProps) => {
+  return {
+    createDeck: () => dispatch(createDeck())
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Setup)

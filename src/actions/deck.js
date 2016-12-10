@@ -13,20 +13,20 @@ export function createDeck(max, numOfCards) {
         number: num
       });
     }
-    dispatch({
+    return Promise.resolve(dispatch({
       type: CREATE_DECK,
       cards: cards,
       result: sum
-    });
+    }));
   };
 }
 
 export const REMOVE_TOP = 'REMOVE_TOP'
 
-export function removeTop(max, numOfCards) {
-  return dispatch => {
+export function removeTopCard() {
+  return dispatch => Promise.resolve(
     dispatch({
       type: REMOVE_TOP
-    });
-  };
+    })
+  );
 }
