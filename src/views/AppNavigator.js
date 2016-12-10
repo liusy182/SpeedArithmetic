@@ -8,7 +8,8 @@ import {
   Navigator 
 } from 'react-native';
 import { Color } from '../utils/theme';
-import Home from './Home';
+import Setup from './setup/Setup';
+import Game from './game/Game';
 
 export default class AppNavigator extends Component {
   constructor(props) {
@@ -18,8 +19,14 @@ export default class AppNavigator extends Component {
 
   renderScene(route, navigator) {
     switch(route.id) {
-      case 'home':
-        return <Home navigator={navigator} />;
+      case 'setup':
+        return <Setup navigator={navigator} />;
+      case 'game':
+        return <Game 
+          navigator={navigator} 
+          max={route.max}
+          numOfCards={route.numOfCards}
+        />;
       default:
         return <Home navigator={navigator} />;
     }
@@ -29,7 +36,7 @@ export default class AppNavigator extends Component {
     return (
       <Navigator
         style={styles.container}
-        initialRoute={{ id: 'home' }}
+        initialRoute={{ id: 'setup' }}
         renderScene={this.renderScene}
       />
     );
