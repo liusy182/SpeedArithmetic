@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import { Color } from '../utils/theme';
 import Setup from './game/Setup';
-import Game from './game/Game';
+import GameController from './game/GameController';
 
 export default class AppNavigator extends Component {
   constructor(props) {
@@ -22,11 +22,7 @@ export default class AppNavigator extends Component {
       case 'setup':
         return <Setup navigator={navigator} />;
       case 'game':
-        return <Game 
-          navigator={navigator} 
-          max={route.max}
-          numOfCards={route.numOfCards}
-        />;
+        return <GameController navigator={navigator} />;
       default:
         return <Home navigator={navigator} />;
     }

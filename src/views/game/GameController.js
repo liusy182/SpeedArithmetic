@@ -6,29 +6,36 @@ import {
   StyleSheet,
   Text,
   Image,
-  Slider,
+  TouchableOpacity,
   View
 } from 'react-native';
-import { Color } from '../../utils/theme';
+import { Color, StatusBarHeight } from '../../utils/theme';
 import { removeTopCard } from '../../actions/deck';
+import Timer from '../../utils/Timer';
 
-class Game extends Component {
+class GameController extends Component {
   static PropTypes = {
     navigator: React.PropTypes.func.isRequired
   }
 
   constructor(props) {
     super(props);
+    this.timer = new Timer();
   }
   
   render() {
-    const { navigator, max, numOfCards}   = this.props;
     return (
-      <View style={styles.container}>
-        <Text style={styles.caption}>
-          {`${max} ${numOfCards}`}
+      <TouchableOpacity 
+        style={styles.container}
+        onPress={() => {}}
+      >
+        <Text style={styles.timer} >
+          {this.timer.getTime().display}
         </Text>
-      </View>
+        <Text style={styles.text}>
+          Tab to Start!
+        </Text>
+      </TouchableOpacity>
     );
   }
 }
@@ -37,7 +44,16 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    backgroundColor: Color.White
+    alignItems: 'center'
+  },
+  text: {
+    fontSize: 36
+  },
+  timer: {
+    position: 'absolute',
+    right: 20,
+    top: StatusBarHeight + 10,
+    fontSize: 18
   }
 });
 
@@ -55,4 +71,4 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Game)
+export default connect(mapStateToProps, mapDispatchToProps)(GameController)

@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 export const CREATE_DECK = 'CREATE_DECK'
 
@@ -17,6 +17,18 @@ export function createDeck(max, numOfCards) {
       type: CREATE_DECK,
       cards: cards,
       result: sum
+    }));
+  };
+}
+
+export const REUSE_DECK = 'REUSE_DECK'
+
+export function reuseDeck() {
+  return (dispatch, getState) => {
+    if(getState().deck.cards.length == 0) Promise.resolve();
+
+    return Promise.resolve(dispatch({
+      type: REUSE_DECK
     }));
   };
 }

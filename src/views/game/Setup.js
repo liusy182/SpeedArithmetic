@@ -10,8 +10,10 @@ import {
   View
 } from 'react-native';
 import { Color } from '../../utils/theme';
-import Button from '../components/Button';
 import { createDeck } from '../../actions/deck';
+import Button from '../components/Button';
+import NumberRange from '../components/NumberRange';
+import DeckSize from '../components/DeckSize';
 
 class Setup extends Component {
   static PropTypes = {
@@ -23,57 +25,23 @@ class Setup extends Component {
     this.state = {
       max: 9,
       numOfCards: 10
-    }
-    this.startGame = this.startGame.bind(this);
+    };
   }
 
-  startGame() {
-    const { max, numOfCards } = this.state;
-    const { navigator, createDeck } = this.props;
-
-    createDeck(max, numOfCards)
-    .then(() => navigator.push({ 
-      id: 'game', 
-      max: max, 
-      numOfCards: numOfCards
-    }));
-  }
-  
   render() {
     const { max, numOfCards } = this.state;
-    const { navigator } = this.props;
+    const { navigator, getReady } = this.props;
     return (
       <View style={styles.container}>
-        <View style={styles.section}>
-          <Text style={styles.caption}>
-            {`Number range: 1 to ${max}`}
-          </Text>
-          <Slider 
-            style={styles.slider}
-            minimumValue={9} 
-            maximumValue={99}
-            step={1}
-            value={max}
-            onValueChange={(v) => this.setState({ max: v })}
-          />
-        </View>
-        <View style={styles.section}>
-          <Text style={styles.caption}>
-            {`Number of cards: ${numOfCards}`}
-          </Text>
-          <Slider 
-            style={styles.slider}
-            minimumValue={5} 
-            maximumValue={100}
-            step={1}
-            value={numOfCards}
-            onValueChange={(v) => this.setState({ numOfCards: v })}
-          />
-        </View>
+        <NumberRange 
+          max={max} 
+          onValueChange={(v) => this.setState({ max: v })} />
+        <DeckSize 
+          numOfCards={numOfCards} 
+          onValueChange={(v) => this.setState({ numOfCards: v })} />
         <Button 
-          text='Start' 
-          onPress={this.startGame} 
-        />
+          text='Get Ready' 
+          onPress={getReady} />
       </View>
     );
   }
@@ -84,16 +52,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     backgroundColor: Color.White
-  },
-  section: {
-    marginVertical: 8
-  },
-  caption: {
-    alignSelf: 'center'
-  },
-  slider: {
-    marginHorizontal: 10,
-    marginVertical: 6
   }
 });
 
@@ -102,8 +60,12 @@ function mapStateToProps(state, ownProps) {
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => {
+  const { navigator } = ownProps;
   return {
-    createDeck: () => dispatch(createDeck())
+    getReady: (max, numOfCards) => {
+      return dispatch(createDeck(max, numOfCards))
+      .then(() => navigator.push({ id: 'game' }));
+    }
   }
 }
 

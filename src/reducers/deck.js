@@ -1,12 +1,14 @@
-'use strict'
+'use strict';
 
 import {
   CREATE_DECK,
+  REUSE_DECK,
   REMOVE_TOP
 } from '../actions/deck';
 
 const DefaultState = {
   cards: [],
+  remainingSize: 0,
   result: 0,
   lastRemovedCard: null
 }
@@ -17,13 +19,21 @@ const deck = (state = DefaultState, action) => {
       return {
         ...state,
         cards: action.cards,
-        result: action.result
+        remainingSize: action.cards.length,
+        result: action.result,
+        lastRemovedCard: null
+      };
+    case REUSE_DECK:
+      return {
+        ...state,
+        remainingSize: state.cards.length,
+        lastRemovedCard: null
       };
     case REMOVE_TOP:
       return {
         ...state,
-        cards: state.cards.slice(0, state.cards.length - 1),
-        lastRemovedCard: state.cards[state.cards.length - 1]
+        remainingSize: state.remainingSize - 1,
+        lastRemovedCard: state.cards[state.remainingSize - 1]
       };
     default:
       return state
