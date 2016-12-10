@@ -1,7 +1,8 @@
 'use strict'
 
 import { combineReducers } from 'redux';
+import cards from './cards';
 
 export default combineReducers({
-    test: () => { return {} }
+    cards
 });
