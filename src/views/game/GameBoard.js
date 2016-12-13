@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import { Color, StatusBarHeight } from '../../utils/theme';
 import { removeTopCard } from '../../actions/deck';
+import Card from '../components/Card';
 
 class GameBoard extends Component {
 
@@ -23,7 +24,7 @@ class GameBoard extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text>Game Board</Text>
+        <Card number={10} />
       </View>
     );
   }
