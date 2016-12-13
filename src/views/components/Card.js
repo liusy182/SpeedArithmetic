@@ -5,6 +5,7 @@ import {
   StyleSheet,
   Text,
   View,
+  TouchableOpacity,
   Dimensions
 } from 'react-native';
 import { Color } from '../../utils/theme';
@@ -13,15 +14,18 @@ const { height, width } = Dimensions.get('window');
 export default class Card extends Component {
 
   render() {
-    const { style, number } = this.props;
+    const { style, number, onTap } = this.props;
     return (
-      <View style={[styles.card, style]}>
+      <TouchableOpacity 
+        style={[styles.card, style]}
+        onPress={onTap}
+      >
         <View style={styles.cardContent}>
           <Text style={styles.text}>
             {number}
           </Text>
         </View>
-      </View>
+      </TouchableOpacity>
     );
   }
 }

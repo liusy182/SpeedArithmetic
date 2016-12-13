@@ -24,15 +24,17 @@ class GameBoard extends Component {
   }
 
   render() {
-    const { cards } = this.props;
+    const { cards, size, removeTopCard } = this.props;
     return (
       <View style={styles.container}>
         {cards.map((card, index) => {
+          if(index >= size) return;
           return (
             <Card 
               style={{ zIndex: index, top: height / 5 + (index * 5) }}
               key={index} 
-              number={card.number} 
+              number={card.number}
+              onTap={removeTopCard}
             />
           );
         })}
@@ -49,8 +51,9 @@ const styles = StyleSheet.create({
 
 
 function mapStateToProps(state, ownProps) {
-  const { cards } = state.deck
+  const { cards, remainingSize } = state.deck
   return {
+    size: remainingSize,
     cards: cards
   };
 }

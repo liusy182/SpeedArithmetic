@@ -10,6 +10,7 @@ export function createDeck(max, numOfCards) {
       let num = Math.ceil(Math.random() * max);
       sum += num;
       cards.push({
+        id: ii,
         number: num
       });
     }
