@@ -63,9 +63,11 @@ export default class GameController extends Component {
         <Text style={styles.timer} >
           {this.state.time}
         </Text>
-        <Text style={styles.text}>
-          Tap to Start!
-        </Text>
+        <View style={styles.textWrapper}>
+          <Text style={styles.text}>
+            Tap to Start!
+          </Text>
+        </View>
       </TouchableOpacity>
     );
   }
@@ -89,9 +91,12 @@ export default class GameController extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
     backgroundColor: Color.White
+  },
+  textWrapper: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   text: {
     fontSize: 36

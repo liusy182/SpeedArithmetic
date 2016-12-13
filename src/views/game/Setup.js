@@ -41,7 +41,7 @@ class Setup extends Component {
           onValueChange={(v) => this.setState({ numOfCards: v })} />
         <Button 
           text='Get Ready' 
-          onPress={getReady} />
+          onPress={() => getReady(max, numOfCards)} />
       </View>
     );
   }

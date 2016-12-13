@@ -7,11 +7,13 @@ import {
   Text,
   Image,
   TouchableOpacity,
-  View
+  View,
+  Dimensions
 } from 'react-native';
 import { Color, StatusBarHeight } from '../../utils/theme';
 import { removeTopCard } from '../../actions/deck';
 import Card from '../components/Card';
+const { height, width } = Dimensions.get('window');
 
 class GameBoard extends Component {
 
@@ -22,9 +24,18 @@ class GameBoard extends Component {
   }
 
   render() {
+    const { cards } = this.props;
     return (
       <View style={styles.container}>
-        <Card number={10} />
+        {cards.map((card, index) => {
+          return (
+            <Card 
+              style={{ zIndex: index, top: height / 5 + (index * 5) }}
+              key={index} 
+              number={card.number} 
+            />
+          );
+        })}
       </View>
     );
   }
@@ -32,10 +43,7 @@ class GameBoard extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: Color.White
+    flex: 1
   }
 });
 
