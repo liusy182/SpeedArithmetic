@@ -44,7 +44,8 @@ export default class Timer {
     this.interval = setInterval(() => {
       let diff = new Date() - this.startTime;
       let min = Math.floor(diff / (60 * 1000));
-      let sec = Math.floor(diff % (60 * 1000));
+      diff = diff - min * 60 * 1000;
+      let sec = Math.round(diff / 1000);
       let display = `${pad(min)}:${pad(sec)}`;
       this.currentTime = {
         value: diff,

@@ -12,8 +12,9 @@ import {
 import { Color, StatusBarHeight } from '../../utils/theme';
 import { removeTopCard } from '../../actions/deck';
 import Timer from '../../utils/Timer';
+import GameBoard from './GameBoard';
 
-class GameController extends Component {
+export default class GameController extends Component {
   static PropTypes = {
     navigator: React.PropTypes.func.isRequired
   }
@@ -21,22 +22,67 @@ class GameController extends Component {
   constructor(props) {
     super(props);
     this.timer = new Timer();
+    this.state = {
+      start: false,
+      time: this.timer.getTime().display
+    };
+    this.renderTap = this.renderTap.bind(this);
+    this.renderGame = this.renderGame.bind(this);
+    this.onTap = this.onTap.bind(this);
+    this.onTick = this.onTick.bind(this);
+    this.onComplete = this.onComplete.bind(this);
   }
-  
-  render() {
+
+  componentDidMount() {
+    this.timer.addListener(this.onTick);
+  }
+
+  componentWillUnmount() {
+    this.timer.removeListener(this.onTick);
+  }
+
+  onTap() {
+    this.setState({ start : true });
+    this.timer.start();
+  }
+
+  onTick() {
+    this.setState({ time : this.timer.getTime().display });
+  }
+
+  onComplete() {
+    this.timer.stop();
+  }
+
+  renderTap() {
     return (
       <TouchableOpacity 
         style={styles.container}
-        onPress={() => {}}
+        onPress={this.onTap}
       >
         <Text style={styles.timer} >
-          {this.timer.getTime().display}
+          {this.state.time}
         </Text>
         <Text style={styles.text}>
-          Tab to Start!
+          Tap to Start!
         </Text>
       </TouchableOpacity>
     );
+  }
+
+  renderGame() {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.timer} >
+          {this.state.time}
+        </Text>
+        <GameBoard onComplete={this.onComplete} />
+      </View>
+    );
+  }
+  
+  render() {
+    return this.state.start? this.renderGame() : this.renderTap();
   }
 }
 
@@ -44,7 +90,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    backgroundColor: Color.White
   },
   text: {
     fontSize: 36
@@ -56,19 +103,3 @@ const styles = StyleSheet.create({
     fontSize: 18
   }
 });
-
-
-function mapStateToProps(state, ownProps) {
-  const { cards } = state.deck
-  return {
-    cards: cards
-  };
-}
-
-const mapDispatchToProps = (dispatch, ownProps) => {
-  return {
-    removeTopCard: () => dispatch(removeTopCard())
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(GameController)
