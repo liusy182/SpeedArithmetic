@@ -57,6 +57,7 @@ export default class Timer {
 
   stop() {
     clearInterval(this.interval);
+    let diff = new Date() - this.startTime;
     let min = Math.floor(diff / (60 * 1000));
     let sec = Math.floor(diff % (60 * 1000));
     let display = `${pad(min)}:${pad(sec)}`;

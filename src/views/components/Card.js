@@ -16,9 +16,20 @@ export default class Card extends Component {
   constructor(props) {
     super(props);
     this.cardAnim = new Animated.Value(1);
+    this.state = {
+      zIndex: this.props.index
+    };
     this.pressed = false;
     this.onPress = this.onPress.bind(this);
-    
+    this.onChange = this.onChange.bind(this);
+  }
+
+  componentDidMount() {
+    this.cardAnim.addListener(this.onChange);
+  }
+
+  onChange(e) {
+    if(e.value === 0) this.setState({ zIndex: -this.state.zIndex });
   }
 
   onPress() {
@@ -37,7 +48,7 @@ export default class Card extends Component {
       <Animated.View style={[
           styles.card, 
           { 
-            zIndex: index, 
+            zIndex: this.state.zIndex, 
             top: this.cardAnim.interpolate({
               inputRange: [0, 1],
               outputRange: [StatusBarHeight, height / 5 + (index * 5)],

@@ -22,7 +22,7 @@ class GameBoard extends Component {
 
   constructor(props) {
     super(props);
-    this.size = this.props.size;
+    this.size = this.props.cards.length;
     this.onTap = this.onTap.bind(this);
   }
 
@@ -31,19 +31,17 @@ class GameBoard extends Component {
     if(this.size === 0) this.props.onComplete();
   }
 
-
   render() {
-    const { cards, remainingSize, removeTopCard } = this.props;
+    const { cards } = this.props;
     return (
       <View style={styles.container}>
         {cards.map((card, index) => {
-          if(index > remainingSize) return; // display last shown last also
           return (
             <Card 
               index={index}
               key={index} 
               number={card.number}
-              onTap={removeTopCard}
+              onTap={this.onTap}
             />
           );
         })}
@@ -60,10 +58,9 @@ const styles = StyleSheet.create({
 
 
 function mapStateToProps(state, ownProps) {
-  const { cards, remainingSize } = state.deck
+  const { cards } = state.deck
   return {
-    cards: cards,
-    remainingSize: remainingSize
+    cards: cards
   };
 }
 
