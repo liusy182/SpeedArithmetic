@@ -6,26 +6,78 @@ import {
   Text,
   View,
   TouchableOpacity,
-  Dimensions
+  Dimensions,
+  Animated
 } from 'react-native';
-import { Color } from '../../utils/theme';
+import { Color, StatusBarHeight } from '../../utils/theme';
 const { height, width } = Dimensions.get('window');
 
 export default class Card extends Component {
+  constructor(props) {
+    super(props);
+    this.cardAnim = new Animated.Value(1);
+    this.pressed = false;
+    this.onPress = this.onPress.bind(this);
+    
+  }
+
+  onPress() {
+    if(this.pressed) return;
+    this.pressed = true;
+    Animated.timing(this.cardAnim, { 
+      toValue: 0,
+      duration: 250
+    }).start();
+    this.props.onTap();
+  }
 
   render() {
-    const { style, number, onTap } = this.props;
+    const { style, number, onTap, index } = this.props;
     return (
-      <TouchableOpacity 
-        style={[styles.card, style]}
-        onPress={onTap}
+      <Animated.View style={[
+          styles.card, 
+          { 
+            zIndex: index, 
+            top: this.cardAnim.interpolate({
+              inputRange: [0, 1],
+              outputRange: [StatusBarHeight, height / 5 + (index * 5)],
+            }),
+            left: this.cardAnim.interpolate({
+              inputRange: [0, 1],
+              outputRange: [10, width / 6],
+            }),
+            width: this.cardAnim.interpolate({
+              inputRange: [0, 1],
+              outputRange: [50, width * 2 / 3],
+            }),
+            height: this.cardAnim.interpolate({
+              inputRange: [0, 1],
+              outputRange: [70, height * 3 / 5],
+            }),
+            borderRadius: this.cardAnim.interpolate({
+              inputRange: [0, 1],
+              outputRange: [5, 20],
+            })
+          }
+        ]}
       >
-        <View style={styles.cardContent}>
-          <Text style={styles.text}>
+        <TouchableOpacity style={styles.cardContent} onPress={this.onPress}>
+          <Animated.Text style={[
+              styles.text,
+              {
+                transform: [{
+                  scale: this.cardAnim.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: [0.2, 1],
+                  })
+                }]
+              }
+            ]}
+          >
             {number}
-          </Text>
-        </View>
-      </TouchableOpacity>
+          </Animated.Text>
+        </TouchableOpacity>
+      </Animated.View>
     );
   }
 }
