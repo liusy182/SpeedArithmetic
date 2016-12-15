@@ -13,6 +13,13 @@ import { Color, StatusBarHeight } from '../../utils/theme';
 import { removeTopCard } from '../../actions/deck';
 import Timer from '../../utils/Timer';
 import GameBoard from './GameBoard';
+import GameResult from './GameResult';
+
+const DisplayState = {
+  Begin: 'Begin',
+  Game: 'Game',
+  Result: 'Result'
+};
 
 export default class GameController extends Component {
   static PropTypes = {
@@ -23,10 +30,10 @@ export default class GameController extends Component {
     super(props);
     this.timer = new Timer();
     this.state = {
-      start: false,
+      displayState: DisplayState.Begin,
       time: this.timer.getTime().display
     };
-    this.renderTap = this.renderTap.bind(this);
+    this.renderBegin = this.renderBegin.bind(this);
     this.renderGame = this.renderGame.bind(this);
     this.onTap = this.onTap.bind(this);
     this.onTick = this.onTick.bind(this);
@@ -42,7 +49,7 @@ export default class GameController extends Component {
   }
 
   onTap() {
-    this.setState({ start : true });
+    this.setState({ displayState : DisplayState.Game });
     this.timer.start();
   }
 
@@ -52,9 +59,10 @@ export default class GameController extends Component {
 
   onComplete() {
     this.timer.stop();
+    this.setState({ displayState: DisplayState.Result });
   }
 
-  renderTap() {
+  renderBegin() {
     return (
       <TouchableOpacity 
         style={styles.container}
@@ -82,9 +90,25 @@ export default class GameController extends Component {
       </View>
     );
   }
+
+  renderResult() {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.timer} >
+          {this.state.time}
+        </Text>
+        <GameResult />
+      </View>
+    );
+  }
   
   render() {
-    return this.state.start? this.renderGame() : this.renderTap();
+    const { displayState } = this.state;
+    if (displayState === DisplayState.Begin) return this.renderBegin();
+
+    else if (displayState === DisplayState.Game) return this.renderGame();
+
+    else if (displayState === DisplayState.Result) return this.renderResult();
   }
 }
 

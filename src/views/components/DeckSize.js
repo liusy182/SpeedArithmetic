@@ -21,7 +21,7 @@ export default class DeckSize extends Component {
         </Text>
         <Slider 
           style={styles.slider}
-          minimumValue={5} 
+          minimumValue={10} 
           maximumValue={100}
           step={1}
           value={numOfCards}
